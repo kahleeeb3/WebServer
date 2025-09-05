@@ -11,7 +11,7 @@ class FrameCapture:
         if not self.cap.isOpened():
             raise RuntimeError("Error: could not open camera.")
         
-    def get_frame_data(self) -> bytes:
+    def get_frame_data(self, quality:int = 80) -> bytes:
         # Check capture available
         if self.cap is None:
             raise RuntimeError("Camera not initialized. Call open() first.")
@@ -22,7 +22,7 @@ class FrameCapture:
             raise RuntimeError("Failed to read frame")
         
         # Encode as JPG
-        success, frame_data = cv2.imencode('.jpg', frame)
+        success, frame_data = cv2.imencode('.jpg', frame, [int(cv2.IMWRITE_JPEG_QUALITY), quality])
         if not success:
             raise RuntimeError("Failed to encode frame as JPEG")
 

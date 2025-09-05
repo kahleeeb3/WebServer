@@ -21,11 +21,11 @@ try:
         
         # update the plot
         plot.update()
-        plot_frame = plot.get_frame_data()
+        plot_frame = plot.get_frame_data(quality=20)
         server_plot.update(plot_frame)
 
         # update video
-        video0_frame = camera.get_frame_data()
+        video0_frame = camera.get_frame_data(quality=20)
         server_video0.update(video0_frame)
 
 except Exception as e:

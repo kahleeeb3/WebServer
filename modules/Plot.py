@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-import io
+import cv2
 import numpy as np
 
 class RandomScatterPlot():
@@ -25,8 +25,11 @@ class RandomScatterPlot():
         y = np.random.rand(self.num_points)
         self.scatter.set_offsets(np.c_[x, y])
     
-    def get_frame_data(self) -> bytes:
+    def get_frame_data(self, quality:int = 80) -> bytes:
         canvas = FigureCanvas(self.fig)
-        buf = io.BytesIO()
-        canvas.print_png(buf)
-        return buf.getvalue()
+        canvas.draw()  # Render the figure
+        buf = np.frombuffer(canvas.buffer_rgba(), dtype=np.uint8)
+        width, height = self.fig.canvas.get_width_height()
+        image = buf.reshape((height, width, 4))[:, :, :3]
+        _, frame_data = cv2.imencode('.jpg', image, [int(cv2.IMWRITE_JPEG_QUALITY), quality])
+        return frame_data.tobytes()

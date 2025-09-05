@@ -30,10 +30,9 @@ class WebServer:
         print(f"Server running at: http://{self.host}:{self.port}")
 
 class VideoChannel:
-    def __init__(self, app: Flask, route: str, jpeg_quality:int = 80):
+    def __init__(self, app: Flask, route: str):
         self.app = app
         self.route = route
-        self.jpeg_quality = jpeg_quality
         self.latest_data = None
         self.frame_num = 0
         self.condV = threading.Condition()
