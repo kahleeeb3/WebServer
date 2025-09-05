@@ -3,10 +3,22 @@ from werkzeug.serving import make_server
 import threading
 
 class WebServer:
-    def __init__(self, host="0.0.0.0", port=5000):
+    def __init__(self, host:str="0.0.0.0", port:int=5000, server_folder:str=None):
         self.host = host
         self.port = port
-        self.app = Flask(__name__, template_folder='./server/', static_folder='./server/')
+
+        # get folder for server html, css, js
+        if server_folder is None:
+            import os
+            server_folder = os.path.join(os.getcwd(), "server")
+        self.server_folder = server_folder
+
+        self.app = Flask(
+            __name__, 
+            template_folder=self.server_folder,
+            static_folder=self.server_folder
+        
+        )
         self._server = None
         self._thread = None
 
