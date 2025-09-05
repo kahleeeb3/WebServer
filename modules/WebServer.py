@@ -67,4 +67,38 @@ class VideoChannel:
                    b"Content-Type: image/jpeg\r\n"
                    b"Content-Length: " + str(len(frame_data)).encode() + b"\r\n\r\n" +
                    frame_data + b"\r\n")
+                
+class TextChannel:
+    def __init__(self, app: Flask, route: str):
+        self.app = app
+        self.route = route
+        self.latest_text = ""
+        self.update_num = 0
+        self.condV = threading.Condition()
+        self._register()
+
+    def _register(self):
+        def text_feed():
+            return Response(self._stream_thread(), mimetype="text/event-stream")
+
+        # Make endpoint unique
+        self.app.add_url_rule(self.route, endpoint=self.route.strip('/'), view_func=text_feed)
+
+    def update(self, new_text: str):
+        """Update the text sent to clients."""
+        with self.condV:
+            self.latest_text = new_text
+            self.update_num += 1
+            self.condV.notify_all()
+
+    def _stream_thread(self):
+        """Generator that yields updated text using SSE."""
+        last_sent = -1
+        while True:
+            with self.condV:
+                self.condV.wait_for(lambda: self.update_num != last_sent, timeout=1.0)
+                if self.update_num == last_sent:
+                    continue
+                last_sent = self.update_num
+                yield f"data: {self.latest_text}\n\n"
     
