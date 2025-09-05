@@ -44,3 +44,6 @@ If using VSCode, you need to add this to your `.vscode/settings.json` file:
     ]
 }
 ```
+
+## 📂 Examples
+Check out the [examples](./examples/) folder for general usage demonstrations. 
