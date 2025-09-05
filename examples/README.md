@@ -5,4 +5,4 @@ The programming examples included in this directory cover various aspects of the
 |---------|-------------|
 | [Camera](./camera) | Streaming Camera Data (tested on windows). |
 | [Plots](./plots)   | Streaming Matplotlib Plots. |
-| [Text](./text)     | Streaming text/html.
+| [Text](./text)     | Streaming Text/HTML.
