@@ -1,0 +1,12 @@
+<head>
+    <title>WebServer</title>
+    <script>
+        const evtSource = new EventSource("/text");
+        evtSource.onmessage = function (e) {
+            document.getElementById("text").innerText = e.data;
+        };
+    </script>
+</head>
+
+<h1>Hello World</h1>
+<p id="text"></p>
